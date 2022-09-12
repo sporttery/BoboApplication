@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">m.bo3k.cn</domain>
+        <domain includeSubdomains="true">www.bo3k.cn</domain>
+        <domain includeSubdomains="true">h.bo3k.cn</domain>
+        <domain includeSubdomains="true">h5.bo3k.cn</domain>
+        <domain includeSubdomains="true">api.bo3k.cn</domain>
+    </domain-config>
+</network-security-config>
