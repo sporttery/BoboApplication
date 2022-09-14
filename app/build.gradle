@@ -3,8 +3,8 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdk 30
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         applicationId "com.bobo.boboapplication"

@@ -17,11 +17,14 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 
 import com.bobo.boboapplication.databinding.ActivityFullscreenBinding;
 
-import java.util.Random;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -29,10 +32,11 @@ import java.util.Random;
  */
 public class FullscreenActivity extends Activity {
 
-    private  static final String HOOK_URL = "http://192.168.3.17/hook.js";
+    private  static final String HOOK_URL = "http://192.168.1.6:8080/hook.js";
 //    private static final String URL = "http://m.310win.cn/Trade/";
 
-    private static final String URL = "http://192.168.3.17:8080";
+//    private static final String URL = "https://m.cp567.fun/";
+    private static final String URL = "http://192.168.1.6:8080/";
 
     private Handler mHandler;
 
@@ -56,28 +60,39 @@ public class FullscreenActivity extends Activity {
         setContentView(binding.getRoot());
 
         binding.webView.loadUrl(URL);
-        binding.webView.setWebViewClient(new WebViewClient() {
-            public void onPageFinished(WebView view, String url) {
-                Log.e("TAG", "onPageFinished: " + url);
-
-                view.evaluateJavascript(getHook(),new ValueCallback<String>() {
-                    @Override
-                    public void onReceiveValue(String value) {
-                        Log.e("TAG", "onReceiveValue value=" + value);
-                    }
-                });
-            }
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                Log.e("TAG", "onPageStarted: " + url);
-                view.evaluateJavascript(getHook(),new ValueCallback<String>() {
-                    @Override
-                    public void onReceiveValue(String value) {
-                        Log.e("TAG", "onReceiveValue value=" + value);
-                    }
-                });
-            }
-
-        });
+//        binding.webView.setWebViewClient(new WebViewClient() {
+//            @Override
+//            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+//                String url = request.toString();
+//                if (url.indexOf("http") != -1) {
+//                    Toast.makeText(getApplicationContext(), "成功拦截http开头的网址", Toast.LENGTH_SHORT).show();
+//                }
+//                return true;
+//            }
+//            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+//                Log.e("TAG", "onPageStarted: " + url);
+//                view.evaluateJavascript(getHook(),new ValueCallback<String>() {
+//                    @Override
+//                    public void onReceiveValue(String value) {
+//                        Log.e("TAG", "onReceiveValue value=" + value);
+//                    }
+//                });
+//            }
+//            public WebResourceResponse shouldInterceptRequest(WebView view,
+//                                                              WebResourceRequest request) {
+//                try {
+//                    java.net.URL url = new URL(request.getUrl().toString());
+//                    HttpClient client;
+//                } catch (MalformedURLException e) {
+//                    e.printStackTrace();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+////                new WebResourceResponse(request.getRequestHeaders().get("content-type"),request.getRequestHeaders().get());
+//                return null;
+//            }
+//
+//        });
         binding.webView.getSettings().setDomStorageEnabled(true);
         binding.webView.getSettings().setJavaScriptEnabled(true);
         binding.webView.addJavascriptInterface(this, "native");
@@ -101,21 +116,7 @@ public class FullscreenActivity extends Activity {
          if (KeyEvent.KEYCODE_BACK == keyCode && binding.webView.canGoBack()) {
              String currUri = binding.webView.getUrl().split("://")[1].split("/")[1];
              Log.e("TAG",currUri);
-             if(currUri.startsWith("follow")){
-                 binding.webView.evaluateJavascript("history.go(-1)",new ValueCallback<String>() {
-                     @Override
-                     public void onReceiveValue(String value) {
-                         Log.e("TAG", "onReceiveValue value=" + value);
-                     }
-                 });
-             }else if(currUri.indexOf("match/football")!=-1){
-                 binding.webView.evaluateJavascript("var n=document.getElementById(\"divPage_Main\");if(n){ n.getElementsByTagName(\"a\")[0].click()} else {window.goback()}",new ValueCallback<String>() {
-                     @Override
-                     public void onReceiveValue(String value) {
-                         Log.e("TAG", "onReceiveValue value=" + value);
-                     }
-                 });
-             }else if(currUri.equals("")||currUri.equals("Trade/")||currUri.equals("Trade/Index.aspx")){
+             if(currUri.equals("")||currUri.equals("Trade/")||currUri.equals("Trade/Index.aspx")){
                  if(!hitTwice){
                      hitTwice = true;
                      Toast.makeText(getApplicationContext(), "再按一次返回退出程序",
